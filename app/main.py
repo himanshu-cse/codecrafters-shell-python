@@ -36,6 +36,9 @@ def main():
         elif cmd == "echo":
             print(arguments[5:])
             
+        elif cmd == "pwd":
+            print(os.getcwd())
+            
         elif cmd == "type":
             if len(commands) < 2:
                 print("type: missing argument")
@@ -44,7 +47,7 @@ def main():
             target = commands[1]
 
             # 1. Check if builtin
-            if target in ["echo", "exit", "type"]:
+            if target in ["echo", "exit", "type", "pwd"]:
                 print(f"{target} is a shell builtin")
                 continue
             
