@@ -13,6 +13,10 @@ def main():
                 break
             else:
                 raise
+            
+        if cmd == "echo":
+            s = commands[1]
+            print(s)
                 
         else:
             print(f"{cmd}: command not found")
