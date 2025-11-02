@@ -64,15 +64,6 @@ def main():
                 print(f"{target}: not found")
                 
         elif file_in_path:
-            print(f"Program was passed {len(commands)} args (including program name).")
-            arg = 0
-            for c in commands:
-                if arg == 0:
-                    print(f"Arg #{arg} (program name): {c}")
-                else:
-                    print(f"Arg #{arg}: {c}")
-                arg += 1
-                
             try:
                 result_shell = subprocess.run(commands, capture_output=True, text=True)
                 if result_shell.stdout.strip():
