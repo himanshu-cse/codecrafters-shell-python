@@ -15,8 +15,14 @@ def main():
             else:
                 raise
             
-        if cmd == "echo":
+        elif cmd == "echo":
             print(arguments[5:])
+            
+        elif cmd == "type":
+            if commands[1] in ["echo", "exit", "type"]:
+                print(f"{commands[1]} is a shell builtin")
+            else:
+                print(f"{commands[1]}: not found")
                 
         else:
             print(f"{cmd}: command not found")
