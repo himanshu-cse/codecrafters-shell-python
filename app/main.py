@@ -1,28 +1,56 @@
 import sys
-
+import os
 
 
 def main():
     while(True):
-        arguments = input("$ ")
-        commands = arguments.split(" ")
+        try:
+            arguments = input("$ ").strip()
+        except EOFError:
+            break  
+
+        if not arguments:
+            continue
+        
+        commands = arguments.split()
         cmd = commands[0]
             
         if cmd == "exit":
-            exit_status = commands[1]
-            if(exit_status == "0"):
+            if len(commands) > 1 and commands[1] == "0":
                 break
             else:
-                raise
+                raise SystemExit
             
         elif cmd == "echo":
             print(arguments[5:])
             
         elif cmd == "type":
-            if commands[1] in ["echo", "exit", "type"]:
-                print(f"{commands[1]} is a shell builtin")
-            else:
-                print(f"{commands[1]}: not found")
+            if len(commands) < 2:
+                print("type: missing argument")
+                continue
+            
+            target = commands[1]
+
+            # 1. Check if builtin
+            if target in ["echo", "exit", "type"]:
+                print(f"{target} is a shell builtin")
+                continue
+            
+            # 2. Search PATH directories
+            path_env = os.environ.get("PATH", "")
+            paths = path_env.split(os.pathsep)
+            found = False
+            
+            for directory in paths:
+                full_path = os.path.join(directory, target)
+                if os.path.isfile(full_path) and os.access(full_path, os.X_OK):
+                    print(f"{target} is {full_path}")
+                    found = True
+                    break
+
+            if not found:
+                print(f"{target}: not found")
+            
                 
         else:
             print(f"{cmd}: command not found")
