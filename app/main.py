@@ -1,10 +1,23 @@
 import sys
 
 
+
 def main():
     while(True):
-        cmd = input("$ ")
-        print(f"{cmd}: command not found")
+        commands = input("$ ").split(" ")
+        cmd = commands[0]
+            
+        if cmd == "exit":
+            exit_status = commands[1]
+            if(exit_status == "0"):
+                break
+            else:
+                raise
+                
+        else:
+            print(f"{cmd}: command not found")
+        
+        
     
 
 
