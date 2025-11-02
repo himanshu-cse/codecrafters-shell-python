@@ -4,7 +4,8 @@ import sys
 
 def main():
     while(True):
-        commands = input("$ ").split(" ")
+        arguments = input("$ ")
+        commands = arguments.split(" ")
         cmd = commands[0]
             
         if cmd == "exit":
@@ -15,8 +16,7 @@ def main():
                 raise
             
         if cmd == "echo":
-            s = commands[1]
-            print(s)
+            print(arguments[5:])
                 
         else:
             print(f"{cmd}: command not found")
