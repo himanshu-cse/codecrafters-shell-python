@@ -1,5 +1,6 @@
 import sys
 import os
+import subprocess
 
 
 def main():
@@ -14,6 +15,17 @@ def main():
         
         commands = arguments.split()
         cmd = commands[0]
+        
+        path_env = os.environ.get("PATH", "")
+        paths = path_env.split(os.pathsep)
+        file_in_path = False
+        
+        for directory in paths:
+            full_path = os.path.join(directory, cmd)
+            if os.path.isfile(full_path) and os.access(full_path, os.X_OK):
+                file_in_path = True
+                path_of = full_path
+                break
             
         if cmd == "exit":
             if len(commands) > 1 and commands[1] == "0":
@@ -50,6 +62,25 @@ def main():
 
             if not found:
                 print(f"{target}: not found")
+                
+        elif file_in_path:
+            print(f"Program was passed {len(commands)} args (including program name).")
+            arg = 0
+            for c in commands:
+                if arg == 0:
+                    print(f"Arg #{arg} (program name): {c}")
+                else:
+                    print(f"Arg #{arg}: {c}")
+                arg += 1
+                
+            try:
+                result_shell = subprocess.run(commands, capture_output=True, text=True)
+                if result_shell.stdout.strip():
+                    print(result_shell.stdout.strip())
+                if result_shell.stderr.strip():
+                    print(result_shell.stderr.strip(), file=sys.stderr)
+            except subprocess.CalledProcessError as e:
+                print(f"Shell command failed with error: {e}")
             
                 
         else:
